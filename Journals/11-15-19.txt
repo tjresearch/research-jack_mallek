@@ -1,0 +1,10 @@
+Actually, probably a more efficient way of achieving this is to have the algorithm not care about badcombos if it is disconnected.
+OK it turns out eliminating badcombos makes my runtime much better, but it increases overestimates, so I have to remove it.
+Alright actually I need a more intelligent way of implementing badcombos, because if I do not eliminate them, my runtime becomes unbearably long, but if I do eliminate them I get more overestimates
+Alright the numbers are finally in.
+
+Number of overestimates: 2650
+Old time: 117 sec
+New time: 1811 sec
+
+OK, this is an improvement in terms of number of overestimates but oh my christ this is a travesty when it comes to runtime.

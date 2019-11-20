@@ -431,7 +431,7 @@ def simpler_implied_paths(state):
     prev = dict()
     paths = []
     for c in all_cycles:
-        path = parse_cycle(c)
+        path,first = parse_cycle(c)
         # prev = combine_complex_paths(prev,path)
         paths.append(path)
     prev = merge_paths(paths,all_cycles)
@@ -459,52 +459,6 @@ def merge_paths(input_paths,all_cycles): #
                 path = combine_complex_paths(path,input_paths[index])
             output_paths = {**output_paths, **path}
     return output_paths
-def implied_paths(state): #takes in a state, and looking at the cycles, generates a list of paths that this cycle implies
-
-    paths = dict()
-    prev = dict()
-    bad_combos = 0
-    length = 0
-    for c in cycles(permutation(goal,inv(state))):
-        not_start_at_0 = False
-        if not c[0] == "0" and cycles(permutation(goal,inv(state))).index(c) == 0:
-            not_start_at_0 = True
-            start = '0'
-            end = c[0]
-            if len(paths) == 0:
-                paths = gen_simple_paths(start,end)
-            else:
-                results = combine_paths(paths,gen_simple_paths(start,end))
-                paths = results[0]
-                bad_combos += results[1]
-
-        for x in range(len(c)-1):
-            start = c[x]
-            end = c[x+1]
-            if len(paths) == 0:
-                paths = gen_simple_paths(start,end)
-            else:
-                results = combine_paths(paths,gen_simple_paths(start,end))
-                paths = results[0]
-                bad_combos += results[1]
-
-        if not c[0] == "0":
-            start = c[-1]
-            end = c[0]
-            if not_start_at_0:
-                end = "0"
-            results = combine_paths(paths, gen_simple_paths(start, end))
-            paths = results[0]
-            bad_combos+= results[1]*2
-
-
-        prev = combine_complex_paths(prev,paths)
-        paths = dict()
-
-
-    if not len(paths) == 0:
-        prev = len(next(iter(paths)))
-    return prev,length+bad_combos*2
 def gen_simple_paths(start,end): #Method that returns all the ways to get from start to finish
     tile_pos = {'0': (0,0), 'A':(1,0), 'B':(2,0), "C":(3,0), 'D':(0,1), "E": (1,1), "F":(2,1), "G":(3,1), "H":(0,2), "I":(1,2), "J":(2,2), "K":(3,2), "L":(0,3), "M":(1,3), "N":(2,3), "O": (3,3)}
     tile_to_index = {'0':0, "A":1, 'B':2, 'C':3, 'D':4,'E':5,'F':6,'G':7,"H":8,'I':9,'J':10,'K':11,'L':12,'M':13,'N':14,'O':15}
@@ -637,16 +591,17 @@ def combine_complex_paths(paths1,paths2):
 
                 new_visited_set = pairs[0][1].union(pairs[1][1])
                 new_visited_list =  list1 + list2 + list3 + list4
-                if badcombo:
-                    badbois[new_path] = (new_visited_set,new_visited_list)
-                else:
-                    new_bois[new_path] = (new_visited_set,new_visited_list)
+                # if badcombo:
+                #     badbois[new_path] = (new_visited_set,new_visited_list)
+                # else:
+                new_bois[new_path] = (new_visited_set,new_visited_list)
     else:
         #if the paths look like they are disconnected
         for path1 in paths1:
             for path2 in paths2:
                 pair_set = get_closest_pairs(paths1[path1][0], paths2[path2][0])
                 for pair in pair_set:
+
                     connecting_path = combine_paths(gen_simple_paths(pair[0], pair[1]), gen_simple_paths(pair[1],pair[0]),exclude_bad_combos= False)[0]
                     new = combine_complex_paths(combine_complex_paths(paths1,connecting_path),paths2)
                     new_bois.update(new)
@@ -718,33 +673,26 @@ def clean_so_no_duplicates(list1,list2,list3,list4):
         if not_empty_4:
             if list3[-1] == list4[0]:
                 del list3[-1]
-def gen_simplest_permutation(c):
-    #probably ignore. Don't think im gonna use it
-    original = c
-    options = []
-    options.append(parse_cycle(c))
-    c = c[1:] + c[0]
-    while not c == original:
-        options.append(parse_cycle(c))
-        c = c[1:] + c[0]
-    print(options)
 
 def parse_cycle(c):
     paths = dict()
+    first_element = None
+    is_connected = c[0] == "0"
     for x in range(len(c) - 1):
         start = c[x]
         end = c[x + 1]
         if len(paths) == 0:
             paths = gen_simple_paths(start, end)
         else:
-            results = combine_paths(paths, gen_simple_paths(start, end))
+            results = combine_paths(paths, gen_simple_paths(start, end),exclude_bad_combos= False)
             paths = results[0]
     if not c[0] == '0':
+        first_element = c[0]
         start = c[-1]
         end = c[0]
-        results = combine_paths(paths, gen_simple_paths(start, end))
+        results = combine_paths(paths, gen_simple_paths(start, end),exclude_bad_combos=False)
         paths = results[0]
-    return paths
+    return paths, first_element
 
 def addition(state,paths,path):
     tile_to_index = {'0':0, "A":1, 'B':2, 'C':3, 'D':4,'E':5,'F':6,'G':7,"H":8,'I':9,'J':10,'K':11,'L':12,'M':13,'N':14,'O':15}
@@ -921,16 +869,25 @@ def intersection_points(paths,path):
 
 
 def createMapDict(paths):
+    bad_combos = set(["LR", "RL","UD","DU"])
     dictionaries = []
     index = -1
     for path in paths:
         mapDictHelper = {}
+        is_bad_combo = False
         for x in range(len(path)):
             char1 = paths[path][1][x]
             char2 = paths[path][1][x + 1]
+
+            if x< len(path)-1 and path[x]+path[x+1]in bad_combos:
+                is_bad_combo = True
+                break
+
             if not char1+char2 in mapDictHelper:
                 mapDictHelper[char1+char2] = 0
             mapDictHelper[char1+char2] += 1
+        if is_bad_combo:
+            continue
         map_dict = {}
         for thing in mapDictHelper:
             if not thing[0] in map_dict:
@@ -1007,15 +964,11 @@ def traverse(path,prev,pos,board_map):
                 the_sets = the_sets.union(next)
             return the_sets
 
-
 # state2 = "BDFCAE0GHIJKLMNO"
-state2 = "AEBCH0IFJDKGLMNO"
-# state2 = "AEBCFHJGD0IKLMNO"
-# state2 = "AEBCFHJGD0IKLMNO"
-# state2 = 'DAFCB0EGHIJKLMNO'
-# state2 = "IABCDEFGH0JKLMNO"
+# state2 = "EDBCN0MIJLGFAHOK"
+state2 = "IABCDEFGH0JKLMNO"
+# state2 = "LABCDEFGHIJK0MNO"
 # print_puzzle(state2)
-
 # print_puzzle(state2)
 # print(tentative_heuristic(state2))
 # print(taxicab(state2))
@@ -1026,17 +979,23 @@ paths = (simpler_implied_paths(state2))
 print(paths)
 
 
-# print(get_real_paths(createMapDict(paths)))
+maps = createMapDict(paths)
+# print(get_real_paths(maps))
 
 
 #
 print(reverse(a_star(state2)[0]))
+# real_paths = get_real_paths(createMapDict(paths))
 # print(tentative_heuristic(state2))
 print(len(a_star(state2)[0]), tentative_heuristic(state2), taxicab(state2))
 
-for path in paths:
+# for path in paths:
 #     print()
-    final = (goto(state2,reverse(path)))
+#     print(path)
+print()
+print("NOW FOR TRAVERSALS")
+for t in get_real_paths(createMapDict(paths)):
+    print(t)
 
 #     print_puzzle(final)
 #     print(cycles(permutation(goal,inv(final))))
@@ -1044,9 +1003,9 @@ for path in paths:
 #     print(taxicab(final))
 #       print(unmoved(paths[path][1],all_cycles))
 
-start = time.process_time()
-test_allpuzles()
-print(time.process_time()-start)
+# start = time.process_time()
+# test_allpuzles()
+# print(time.process_time()-start)
 
 # state2 = "0DBCEAFGHIJKLMNO"
 # print_puzzle(state2)

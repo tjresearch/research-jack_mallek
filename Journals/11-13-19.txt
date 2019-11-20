@@ -1,0 +1,9 @@
+I got git working! yayyy!
+
+OK so I think what is happening is that for disconnected cycles, what happens is that the method assumes that it will start on the first tile in the cycle, rather than the one that actually ends up connecting with the other paths
+This is important because sometimes when not starting at the correct location, it will look like something is a bad combo, when it won't be in the final path
+I think the way of solving this problem is having a different protocol for disconnected paths.
+I will generate the regular path methods for them the first time, but remember where the first element of the cycle was, and when combining, if the first element of the cycle was not the element used to connect, it will recalculate the path
+This, again, may increase runtime, but I feel like it is a necessary addition.
+
+Alright I don't have time for this today but what I want to be doing next time is to go into the "combine complex paths" method and adding new procedure for combining disconnected paths
