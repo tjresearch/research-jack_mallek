@@ -1,0 +1,9 @@
+OK so I just found something interesting. My method seems to be consistently overestimating I evaluating a closed loop.
+Specifically in the few that I have looked at it overestimates when there is a single cycle where the zero remains in the top left corner after the movement.
+Additionally, it can even fail when taxicab is perfectly accurate.
+I think the root of the problem is that when the zero isn't included in the cycle (because it has no net changes in its overall position) the algorithm assumes that the remaining cycle must be in a particular order
+For instance, one instance that it is failing on is when it has the cycle A->D->E->A.
+The algorithm sees this, and assumes that it must go in order, ie. first going to A, then going to D, then going to E.
+However, this order is fundamentally arbitrary, and in this particular case leads to a much more complex implied path than is correct
+A more simplified order can be found using cyclic permutations, on the cycle D->E->A->D.
+So what I need to be doing is creating a method that will eliminate needlessly complex cyclic permutations

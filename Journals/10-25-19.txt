@@ -1,0 +1,16 @@
+OK I think the solution to my problem is that my method doesn't have the flexibility that I need to branch off from a central point.
+So what I need to do is instead of a linear model, where each thing comes after another, I need to just create a sort of map, with arrows pointing from every point to somewhere it connects to, then randomly choosing which arrow to follow
+But I also need a way to be able to implement this without having to copy this thing every time
+OK so I think what will work is that the map will be a dictionary, with keys of the tile indexes, and values of a set of tuples of the form (TileIndex,GoingToIndex,numberOfTimes).
+For instance, if the zero is implied to move from index E to F twice, then the structure would look like {'E':set([("EF",2)])}
+It should also have a length of the total path stored as an int
+Now, when constructing actual paths out of this, It will start at the zero, and traverse the map along the arrows until it runs out of arrows or hits a dead end
+So the path will also have a dictionary of the same form. It will be blank at the beginning, and it will start adding with every move
+For instance, starting at zero, the dict is blank, but when the zero moves right it will now look like {'0':set([("0A",1)])}
+I'll add a new tuple every time it moves, and to check where it can still move, I will take the difference of the map set with the path set
+(so if something is in the map set that isn't in the path set it can still go)
+Oh heck but there needs to be a way to traverse the path in multiple directions, so I probably need to have it split recursively whenever it splits
+Actually, I'm altering the deal (pray I don't alter it any further), so instead of a set, I'm just gonna have a dictionary
+
+Alright so I am currently working on the traverse method, which is the thing responsible for actually going through the dictionaries im creating
+I am struggling though on how to recursively traverse, without deepcopying, which I know is terribly inefficient.

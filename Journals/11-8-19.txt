@@ -1,0 +1,13 @@
+OK so I think I know what's causing a whole bunch of overestimation.
+So what's happening is that for some paths, there are three separate cycles, but I am combining them in a very awkward order, so it gives an incorrect path
+I think I can just make it so that if I combine the paths in any order then it should work.
+Ok before I run this I know that this will probably significantly increase my runtime, but if it can get the decrease in overestimates that I want it should be worth it
+OK so it gave a runtime error. Interesting.
+OK doesn't help with the runtime errors but something to note is that there are a lot of "bad combos", so if the runtime is high I can start by trying to eliminate those
+OK I see what the problem is. Because this thing doesn't start at the zero, it can start on a cylce that has its first move being Left  and therefore try to move left when it really can't.
+I think I can fix this by making the method
+
+Alright, so this approach reduced overestimates by ~1000, so currently I have 5288, but it doubled my runtime
+
+Old time: 114 sec
+New time: 251 sec

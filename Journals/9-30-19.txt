@@ -1,0 +1,1 @@
+ Today I worked to simplify my implied path method by connecting all of the cycles first, and then connecting the zero to that if it is a closed loop.

@@ -1,0 +1,7 @@
+New time: 145.92
+Prev time: 181.07
+
+OK so I'm gonna make an executive decision to use the new method, because this already takes so long to run and I don't want to waste 40 seconds every time I run it.
+However, something to note is that this does affect the amount of overestimates I am getting, because it can no longer use less complete paths to base itself off of.
+With the new and improved method, I am getting a number of overestimates at 6300 now, which is nearly half of the 11000 before.
+This is definitely a major improvement.

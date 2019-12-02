@@ -1,0 +1,11 @@
+So i got the premium version of pycharm and ran the profiler. What I found was that traverse takes up about 36% of my runtime, and "goto" takes up another 25%\
+That's good information, but actually kind of irrelevant to what I want to do now.
+
+Ok so I am trying to create a new method called "successive correction", which takes any path, and then tries to change it repeatedly until it is correct.
+However, I am running into some difficulties. Most of them are bugs.
+OK so what I am trying to do is this:
+    take the first implied path I generate, and then see how messed up the board gets when I use it backwards
+    Use the cycle of the resulting board to determine how to fix the path
+    Generate new paths that fix the original path a little
+    Repeat
+I think the places that I'm making errors is in the second step, but I don't know exactly what I should be doing.

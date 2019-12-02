@@ -1,0 +1,1 @@
+Today I worked more on the traverse method, trying to make sure it runs without runtime errors, and stopping it from getting it caught in a dead end and simply returning the incomplete path rather than the whole one.

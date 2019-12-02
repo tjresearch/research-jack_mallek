@@ -15,7 +15,7 @@ position_dict = {}
 for x in range(0, size * size):
     position_dict[goal[x]] = (x % size, int(x / size))
     position_dict[(x % size, int(x / size))] = goal[x]
-def swap (a: int,b: int ,string: str):
+def swap (a,b,string):
     # returns a new string with the values swapped
     ans = string[:a] + string[b] + string[a+1 : b] + string[a] + string[b+1 :]
     return ans
@@ -425,9 +425,8 @@ def unmoved(visited_set, all_cycles): # returns a set of all the places where im
     not_moved = set(['0','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O']).difference(moved)
     interesting_unmoved = not_moved.intersection(visited_set)
     return interesting_unmoved
-def simpler_implied_paths(state):
+def simpler_implied_paths(all_cycles, connect_the_zero = True):
 
-    all_cycles = cycles(permutation(goal,inv(state)))
     prev = dict()
     paths = []
     for c in all_cycles:
@@ -435,7 +434,7 @@ def simpler_implied_paths(state):
         # prev = combine_complex_paths(prev,path)
         paths.append(path)
     prev = merge_paths(paths,all_cycles)
-    if state[0] == '0':
+    if all_cycles[0][0] == '0' and connect_the_zero:
         prev = connect_zero(prev)
     # branch_from_intersection(prev, all_cycles)
     return prev
@@ -712,16 +711,18 @@ def addition(state,paths,path):
 def tentative_heuristic(state):
     if state == goal:
         return 0
-    paths = simpler_implied_paths(state)
-    real_paths = get_real_paths(createMapDict(paths))
+    all_cycles = (cycles(permutation(goal,inv(state))))
+
+    paths = simpler_implied_paths(all_cycles)
+    real_paths = get_real_paths_and_list(createMapDict(paths))
     if len(paths) == 0:
         pass
     est = 1000000000
-    for path in real_paths:
+    for path_and_list in real_paths:
         # add = addition(state,paths,path)
-        add = taxicab(goto(state,reverse(path))) /2
+        add = taxicab(goto(state,reverse(path_and_list[0]))) /2
 
-        temp_est =  len(path) + add
+        temp_est =  len(path_and_list[0]) + add
         if temp_est<est:
             est = temp_est
     if est == 1000000000:
@@ -868,25 +869,35 @@ def intersection_points(paths,path):
     return set()
 
 
-def createMapDict(paths):
+def createMapDict(paths, exclude_badcombo = True, modify_badcombo = False):
     bad_combos = set(["LR", "RL","UD","DU"])
     dictionaries = []
     index = -1
     for path in paths:
         mapDictHelper = {}
         is_bad_combo = False
+        skip = False
         for x in range(len(path)):
             char1 = paths[path][1][x]
             char2 = paths[path][1][x + 1]
 
-            if x< len(path)-1 and path[x]+path[x+1]in bad_combos:
+            if skip:
+                skip = False
+                continue
+            skip = False
+            if x< len(path)-1 and path[x]+path[x+1]in bad_combos :
                 is_bad_combo = True
-                break
-
+                if exclude_badcombo:
+                    break
+                if modify_badcombo:
+                    x += 2
+                    skip = True
+            if skip:
+                continue
             if not char1+char2 in mapDictHelper:
                 mapDictHelper[char1+char2] = 0
             mapDictHelper[char1+char2] += 1
-        if is_bad_combo:
+        if is_bad_combo and exclude_badcombo:
             continue
         map_dict = {}
         for thing in mapDictHelper:
@@ -897,7 +908,7 @@ def createMapDict(paths):
             dictionaries.append(map_dict)
             index += 1
     return dictionaries
-def get_real_paths(dictionaries):
+def get_real_paths_and_list(dictionaries):
     results = set()
     for dictt in dictionaries:
         results = results.union(traverse("",{},'0',dictt))
@@ -937,66 +948,105 @@ def traverse(path,prev,pos,board_map):
     dir_dict = { 1:'R', -1:'L',  -4:'U',  4:'D'}
 
     while True:
-        options = continue_options(prev,pos,board_map)
-        if not pos in prev:
-            prev[pos] = dict()
+        options = continue_options(prev,pos[-1],board_map)
+        if not pos[-1] in prev:
+            prev[pos[-1]] = dict()
         if len(options) == 0:
             if is_complete(prev,board_map):
-                return set([path])
+                return set([(path,pos)])
             return set()
         if len(options) == 1:
-            if not options[0] in prev[pos]:
-                prev[pos][options[0]] = 0
-            prev[pos][options[0]] += 1
-            increment = dir_dict[tile_to_index[options[0]]-tile_to_index[pos]]
-            pos = options[0]
+            if not options[0] in prev[pos[-1]]:
+                prev[pos[-1]][options[0]] = 0
+            prev[pos[-1]][options[0]] += 1
+            increment = dir_dict[tile_to_index[options[0]]-tile_to_index[pos[-1]]]
+            pos += options[0]
             path += increment
         if len(options)>1:
             the_sets = set()
             for opt in options:
-                if not opt in prev[pos]:
-                    prev[pos][opt] = 0
+                if not opt in prev[pos[-1]]:
+                    prev[pos[-1]][opt] = 0
 
                 new_prev = copy_prev(prev)
-                new_prev[pos][opt] += 1
-                increment = dir_dict[tile_to_index[opt] - tile_to_index[pos]]
-                next = traverse(path+increment,new_prev,opt,board_map)
+                new_prev[pos[-1]][opt] += 1
+                increment = dir_dict[tile_to_index[opt] - tile_to_index[pos[-1]]]
+                next = traverse(path+increment,new_prev,pos+opt,board_map)
                 the_sets = the_sets.union(next)
             return the_sets
 
-# state2 = "BDFCAE0GHIJKLMNO"
+def successive_correction(state,path_and_list):
+
+    final = goto(state,reverse(path_and_list[0]))
+    new_cycles = (cycles(permutation(goal,inv(final))))
+    # print(new_cycles)
+    dictionary = dict()
+    list = []
+    for c in new_cycles:
+        for index in range(len(c)-1):
+            dictionary[c[index]] = c[index+1]
+        if not c[0] == 0:
+            dictionary[c[-1]] = c[0]
+    for char in path_and_list[1]:
+        if char in dictionary:
+            list.append(dictionary[char])
+        else:
+            list.append(char)
+    weird_paths = simpler_implied_paths([list])
+    map = createMapDict(weird_paths, exclude_badcombo=False, modify_badcombo=True)
+    real_paths = get_real_paths_and_list(map)
+    minimum = 100000000
+    min_path = ""
+    for path_and_list in real_paths:
+
+        est = taxicab(goto(state,reverse(path_and_list[0])))
+        if est<minimum:
+            minimum = est
+            min_path = path_and_list[0]
+    print(min_path, "(minimum)")
+    # print(new_cycles)
+state2 = "BDFCAE0GHIJKLMNO"
 # state2 = "EDBCN0MIJLGFAHOK"
-state2 = "IABCDEFGH0JKLMNO"
-# state2 = "LABCDEFGHIJK0MNO"
-# print_puzzle(state2)
-# print_puzzle(state2)
-# print(tentative_heuristic(state2))
-# print(taxicab(state2))
+
+# state2 = "A0BCDEFGHIJKLMNO" #0 to A
+# state2 = "CAB0DEFGHIJKLMNO" #0 to C
+# state2 = "DABC0EFGHIJKLMNO" #0 to D
+# state2 = "FABCDE0GHIJKLMNO" #0 to F
+state2 = "IABCDEFGH0JKLMNO" #0 to I
+# state2 = "KABCDEFGHIJ0LMNO" #0 to K
+# state2 = "LABCDEFGHIJK0MNO" #0 to L
+# state2 = "NABCDEFGHIJKLM0O" #0 to M
+# state2 = "LABCDEFGHIJK0MNO" #0 to L
+print(reverse(a_star(state2)[0]), "(correct)")
+
+# successive_correction(state2,('DRD', '0DEI'))
+
+print_puzzle(state2)
 all_cycles = (cycles(permutation(goal,inv(state2))))
 print(all_cycles)
 
-paths = (simpler_implied_paths(state2))
+paths = (simpler_implied_paths(all_cycles))
 print(paths)
 
 
 maps = createMapDict(paths)
-# print(get_real_paths(maps))
 
 
 #
-print(reverse(a_star(state2)[0]))
-# real_paths = get_real_paths(createMapDict(paths))
 # print(tentative_heuristic(state2))
 print(len(a_star(state2)[0]), tentative_heuristic(state2), taxicab(state2))
 
 # for path in paths:
-#     print()
 #     print(path)
-print()
-print("NOW FOR TRAVERSALS")
-for t in get_real_paths(createMapDict(paths)):
-    print(t)
+    # print(unmoved(paths[path][0],all_cycles))
 
+print("NOW FOR TRAVERSALS")
+for t in get_real_paths_and_list(createMapDict(paths)):
+    final = goto(state2,reverse(t[0]))
+    print(t,cycles(permutation(goal,inv(final))))
+final = goto(state2,reverse("RDDLURD"))
+print(cycles(permutation(goal,inv(final)))
+      )
 #     print_puzzle(final)
 #     print(cycles(permutation(goal,inv(final))))
 #     print(intersection_points(paths,path))

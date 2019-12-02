@@ -1,0 +1,10 @@
+Ok, so today I finished my simplified paths method and also got it working with closed loops.
+Now, there are only 15526 puzzles where it overestimates rather than the previous 16586, which is an improvement but still shows that there is a lot of work to be done.
+Ooooh, this is interesting. So, my method actually varies randomly on whether it overestimates. I've seen it go from 15526, to 15577, to 15519 with the exact same code.
+So I assume what's happening is that in some cases the order that things are removed from a set is somehow dictating what the answer is, which should not be happening
+OK I think I have solved the problem, or I could just be getting extremely lucky.
+There was some amount of randomness in my "get closest pair" if there were two pairs of positions that were equally far away, which would only return one of them based on position in the set.
+Now I have it so that it returns all closest pairs and the problem seems resolved.
+YAY this has reduced the number of overestimates to 11586. Progress!
+Ok also for some reason some of the solutions were varying in length so I only did the ones with the minimum length.
+This has reduced the number to 11403

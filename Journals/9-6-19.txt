@@ -1,0 +1,5 @@
+OK so I was working on the implied paths method a bit more.
+Something that I realized was that the thing would occasionally generate completely invalid paths (e.g. going Up 3 times at the beginning)
+I realized this was because the combine method doesn't realize if it can't functionally combine things, so I added functionality to add paths with bad combos only if there are no other options, instead of just returning an empty set
+I actually added primitive heuristic capability by adding the length of the path to the number of bad combos times 2.
+Something I'm thinking about for next time is adding functionality for the number of times it "goes against its previous movement" and then using that to predict the distance

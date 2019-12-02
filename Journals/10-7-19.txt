@@ -1,0 +1,4 @@
+Ok so today I was trying to see why my method was giving so many overestimates that shouldn't really be overestimates. I still do not know what is happening. this is really weird.
+I tried to rewrite my old "test-allpuzzles" method but it hasn't worked. I think I may have to abandon this idea.
+OK so something is seriously wrong with my "test all puzzles" method because when I am going back to my original code it gives 59,000 overestimates.
+I have no idea what's going on.

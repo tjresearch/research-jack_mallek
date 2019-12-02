@@ -1,0 +1,3 @@
+Today I was playing around with specific weird puzzles that my method underestimates on, specifically what happens when only the I or on the L are swapped with zero.
+This is something that taxicab distance is very bad at, but my method also fails this as well.
+However, I thought that this might be useful to look into, because there are only a finite number of shortest paths that swap two tiles without changing any others, and I thought that I may be able to apply this to puzzles where there are "unmoved tiles", specifically when it looks like a path should go through a specific location, but that location remains unchanged overall.

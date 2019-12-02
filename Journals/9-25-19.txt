@@ -1,0 +1,3 @@
+HEYYYY we got runtime errors down to zero! OK so previously I was getting errors that the paths I was generating were not actually valid (i.e. the zero might start in the top left but the path would tell it to go left)
+This is a problem, but I noticed that oftentimes the path lists that keep track of everywhere the zero had gone in order often contained duplicates, so I altered my procedure of combining complex paths to eliminate these duplicates.
+As a result, I no longer get runtime errors! This is pretty great news, however the method still overestimates in a lot of cases so there is certainly more work to be done.

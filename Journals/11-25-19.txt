@@ -1,0 +1,4 @@
+I think I may have something. I have got a version of successive iteration that finds the correct path when the ordinary method does not.
+I need to test this on other things, but this feels good.
+
+OK I just had an idea. The cycles of the messed up state most likely only applies to the last instance of the tile, and therefore when doing successive correction, I only need to replace the last instance, not every instance.

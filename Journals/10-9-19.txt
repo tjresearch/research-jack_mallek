@@ -1,0 +1,3 @@
+Ok so I got the overestimates back to where they were before, and I also started playing around with two additional concepts.
+I'm going to start looking into a) self-intersection, which means looking at when the path could branch without it being obvious, and
+b) instead of just calculating taxicab distance of the implied path, I want to actually look at the cycles of it to see if I can't gain any info on how to fix my path

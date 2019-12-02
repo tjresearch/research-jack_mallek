@@ -1,0 +1,6 @@
+MAJOR PROGRESS TODAY
+So combine complex paths is up and running, and my implied paths method works on most two cycle paths I give it.
+Additionally, the implied paths for two+ cycle paths are very good, so when I take the minimum taxicab distance of all of them I get the exact distance away
+This is much better than the one cycle paths and I am very happy about this
+However, it is somehow failing on this one path saying that when I try to go to the path it fails
+But this is a problem for Monday

@@ -1,0 +1,2 @@
+Today I created a method to generate all the possible puzzles up to a certain number and used that to debug my methods that occasionally had runtime errors
+Still working to get the runtime errors from 270/60,000 to 0 but its a start, and this will be a useful method in the future

@@ -1,0 +1,3 @@
+Alright so we got some work done today bois.
+So, I managed to get the thing working on two+ cycle states who's implicit paths do not intersect, which is pretty huge progress, but unfortunately my heuristic in its current form always overestimates, which is a problem for an admissible heuristic
+I don't know yet what I'm going to do to fix this but that is a problem for friday.

@@ -1,0 +1,3 @@
+Ok so today I tried tried to fix a specific case where the path intersects itself, and therefore can possibly branch in two different directions.
+However, my method does not realize this. It thinks that since the cycles indicate it goes in a certain order, the implied path must go that same way, even if it doesn't.
+I started working on a "branch from intersection" method to help remedy this, which I am making progress on, but very much still working on.

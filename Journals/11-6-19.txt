@@ -1,0 +1,11 @@
+OK so my method works pretty well currently, but it is very very slow. I am hoping of making some modifications to get it to run faster.
+What I am considering is trying to reduce the number of traversals the method has to do, and therefore decreasing runtime.
+Perhaps a way of doing this is instead of calculating the traversals for each path individually, I can add them all to a set and then calculate on the set
+This way I would not be double calculating. OK so I just ran the method again, where I do not re-do the whole process for a duplicate.
+
+Old time: ~150 sec
+New time: 114 sec
+
+Improvement! Just cut an extra 35 seconds off.
+Actually, I just realized that my code is extremely complex and I have practically no documentation.
+I think I'll spend the rest of class adding comments to my code.

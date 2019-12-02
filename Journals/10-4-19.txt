@@ -1,0 +1,10 @@
+Alright so previously I was getting an overestimate, because when going along closed loops, the method wouldn't generate the option for going back the way it came and cancelling out the path (as it should).
+I figured out that this was because one of the methods I was using does not like going back over the same territory, and so I added an option to disable this avoidance
+Now the overestimates is at 11,123 which reduced overestimates by about 300. Not much but progress!
+Ok so I am experimenting with a new way of determining how "messed up" the board is at the end other than using taxicab distance.
+So what I am trying is looking at the cycles, and then seeing from that which tiles should remain in their original positions.
+If these tiles are not in their original position after the transformation, I add two to the length of the path.
+Currently this is significantly worse than my other method but I'm going to see if there is anything to it because it sounds like an interesting idea
+OOOH this has now gotten overestimates down to 6145! This is looking promising
+Ok this is really weird. For some reason, the number of over-estimates has gone up to 20,000 despite the fact that it doesn't seem to actually be overestimating on any of them
+Ok now it's at 8000 despite me being able to find a whole bunch of these that it doesn't overestimate on. I don't get this. 

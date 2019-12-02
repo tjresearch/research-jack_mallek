@@ -1,0 +1,11 @@
+THE GREAT WAR IS OVER!!!! HAPPY ARMISTICE DAY!!!
+OK so my goal for today is to reduce the over 4 minute runtime for going through all the puzzles of length 14 or less.
+I brought up this idea last time, but I think I am going to do this by eliminating bad combos from the list of moves before I process them.
+I think I will implement this not by cycling through every every list to see if it has a bad combo, but by checking when the paths are connected if it creates a bad combo
+This way I should avoid needless processing and hopefully reduce runtime.
+YAAAAYYY This has made the algorithm MUUUCHHH faster and has not changed the number of overestimates
+
+Old time: 251 sec
+New time: 177 sec
+This saves me about a full minute every time I run it and I think the time I invested into solving this problem will eventually be less than the time I save by not having to spend that extra minute every time I test all the puzzles.
+Now for working on the remaining overestimates.

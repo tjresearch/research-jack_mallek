@@ -1,0 +1,2 @@
+Ok so something that I noticed while debugging was that my most basic "combine path" method is generating paths that don't make sense within the context of the problem.
+I'm not sure exactly how to deal with this. Something i'm thinking about is maybe to compare my path and generate the cycles of it, and then compare that to the state, but I am worried that this will mess up the results of currently working paths.

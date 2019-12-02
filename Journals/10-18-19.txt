@@ -1,0 +1,2 @@
+I have been making progress on the "branch from intersection" method, trying to eliminate runtime errors.
+I am mainly getting errors during when I am rearranging the path, that generate results that are not connected.

@@ -1,0 +1,6 @@
+Worked today on Method for generating the implied paths from a certain boardstate.
+I developed two new methods, one for generating a "simple path" between two letters, and one for combining two simple paths into a complex path
+This method works as expected except in cases where there are two separate  cycles, where it starts to do poorly.
+The reason why the method does this is it tries to connect the END of the first cycle to the BEGINNING of the second, which is rarely what actually happened.
+I hope to remedy this issue on Friday.
+ALSO! Sometimes the combination results in completely invalid paths! I'm working on this now

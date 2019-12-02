@@ -1,0 +1,11 @@
+"A" -> B means Tile "A" gets mapped to Index B
+
+Proposed method of correcting errored paths with the cycles
+Look at all the letters that appear in the cycles of trying to go back from the state with the implied path. These are the tiles that are troublesome
+Then, pull up the path list, for example:
+['BE', 'CJ']
+['0', 'A', 'B', 'C', 'G', 'F', 'J', 'I', 'E', 'F', 'B', 'A', 'E', 'D']
+Then look at these particular numbers and compare them with what is given by the original state.
+So for instance. because A comes directly before B, then B comes directly before A, so "B" -> B
+Another example, I comes before E, so this implies that "I" -> E.
+However, this doesn't happen in the actual state, so therefore these need to be looked at in greater depth.

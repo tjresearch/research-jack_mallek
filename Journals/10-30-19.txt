@@ -1,0 +1,4 @@
+OK I just got the coolest result. We got overestimates down to exactly 58! That's wild!! (It took wayyyyyy longer but that's ok)
+But what I expect is happening is that the algorithm is sometimes choosing the paths that are shorter, and because when the thing to correct the paths, it divides taxicab by 2, so it will probably choose shorter, less correct paths, rather than the longer ones that are a bit off. I'm going to try this again without dividing by 2
+HOLY HELL even when adding the full taxicab distance it only has ~3000 overestimates. That's insane
+Ok I think I am at the point where I can start seeing not just where it overestimates, but where it understimates.

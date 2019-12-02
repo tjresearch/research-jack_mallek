@@ -1,0 +1,6 @@
+OK we made some really good progress today.
+So, I deleted my get_visited_and_path method and redid my get_simple_paths method to work with dictionaries of the path as the key and (visited_set, visited_list) as the value
+Then, I reworked all my other methods to work with the dictionary rather than the set I was using before
+After that I started made my "combine_complex_paths" method that will hopefully allow me to combine the paths implied by two cycles into one implied path for both
+What I need to be working on for next time is rewriting my "implied_paths" method to use this new "combine_complex_paths" method
+Woo! Today was a good day!

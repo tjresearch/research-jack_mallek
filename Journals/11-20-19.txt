@@ -1,0 +1,8 @@
+So I did something to make my method run a lot faster, however a downside is that it increases overestimates.
+But the decrease in runtime is so significant that it makes it functionally impossible to go back to the old way.
+Old time: 1810 sec
+New time: 282 sec
+
+There is absolutely no way I am waiting a full 30 minutes to have my algorithm run, so I think I will be working on this method instead.
+
+OK I think I may have a new approach for solving this. Instead of generating all the possible paths, and then choosing the best one, I think an alternative way is to just generate one path and then make gradual corrections until it is correct.

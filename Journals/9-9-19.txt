@@ -1,0 +1,3 @@
+agenda: working on getting implied paths to work well for states with multiple cycles.
+plan: rework implied paths, so that instead of only listing directions, it also lists the positions that it visited, so that it will be easier to see where to connect the other cycles to
+accomplished: worked on and almost finished my "get_visited_and_path" method that will return a set of the visited locations and a list of all the places the zero has been in order of visitation.
